@@ -4,7 +4,7 @@ defmodule TwitterWeb.TweetsController do
   alias Twitter.Tweets
 
   #все ответы на твит с указанным id
-  def index(conn, %{"id" => id}) do
+  def show(conn, %{"id" => id}) do
     tweets = Tweets.reply_tweets(id)
     render(conn, "index.json", %{tweets: tweets})
   end
