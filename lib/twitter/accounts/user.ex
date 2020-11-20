@@ -2,36 +2,43 @@ defmodule Twitter.Accounts.User do
   use Ecto.Schema
 
   import Ecto.Changeset
+  import Bcrypt, only: [hash_pwd_salt: 1]
 
   alias Ecto.Changeset
   alias Twitter.Tweets.Tweet
-
-  @required [:email, :password_hash, :username]
-  @optional [:name, :bio]
+  alias Twitter.Accounts.User
 
   schema "users" do
     field :email, :string
-    field :password, :string, virtual: true
     field :password_hash, :string
     field :username, :string
-    field :name, :string
-    field :bio, :string
+    field :password, :string, virtual: true
+    field :password_confirmation, :string, virtual: true
 
     has_many :tweets, Tweet
 
     timestamps()
   end
 
-  def changeset(user, attrs) do
+  def changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, @required ++ @optional)
-    |> validate_required(@required)
-    |> put_password_hash()
+    |> cast(attrs, [:email, :password, :password_confirmation, :username]) # Remove hash, add pw + pw confirmation
+    |> validate_required([:email, :password, :password_confirmation]) # Remove hash, add pw + pw confirmation
+    |> validate_format(:email, ~r/@/) # Check that email is valid
+    |> validate_length(:password, min: 8) # Check that password length is >= 8 
+    |> validate_confirmation(:password) # Check that password === password_confirmation
+    |> unique_constraint(:email) 
+    |> put_password_hash # Add put_password_hash to changeset pipeline
   end
 
-  def put_password_hash(%Changeset{valid?: true, changes: %{password: password}} = changeset) do
-    put_change(changeset, :password_hash, Argon2.add_hash(password))
+  defp put_password_hash(changeset) do
+    case changeset do
+      %Changeset{valid?: true, changes: %{password: pass}}
+        ->
+          put_change(changeset, :password_hash, hash_pwd_salt(pass))
+      _ ->
+          changeset
+    end
   end
-
-  def put_password_hash(changeset), do: changeset
 end
+
