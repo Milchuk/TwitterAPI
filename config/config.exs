@@ -29,3 +29,8 @@ config :phoenix, :json_library, Jason
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
+
+#Guardian config
+config :twitter, Twitter.Guardian,
+  issuer: "twitter",
+  secret_key: "qsZ5vFmkSb2gVhV4VEYXRTi4YvoonD5Pt4zv+Ht/xvsYD4eWPouEvRSM2yBQT67K"
