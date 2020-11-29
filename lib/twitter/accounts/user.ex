@@ -22,13 +22,13 @@ defmodule Twitter.Accounts.User do
 
   def changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:email, :password, :password_confirmation, :username]) # Remove hash, add pw + pw confirmation
-    |> validate_required([:email, :password, :password_confirmation]) # Remove hash, add pw + pw confirmation
-    |> validate_format(:email, ~r/@/) # Check that email is valid
-    |> validate_length(:password, min: 8) # Check that password length is >= 8 
-    |> validate_confirmation(:password) # Check that password === password_confirmation
+    |> cast(attrs, [:email, :password, :password_confirmation, :username])
+    |> validate_required([:email, :password, :password_confirmation])
+    |> validate_format(:email, ~r/@/)
+    |> validate_length(:password, min: 8)
+    |> validate_confirmation(:password)
     |> unique_constraint(:email) 
-    |> put_password_hash # Add put_password_hash to changeset pipeline
+    |> put_password_hash
   end
 
   defp put_password_hash(changeset) do
