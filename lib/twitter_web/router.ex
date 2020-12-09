@@ -31,6 +31,7 @@ defmodule TwitterWeb.Router do
     post "/sign_in", UsersController, :sign_in
     get "/tweets/:id", TweetsController, :show
     resources "/tweets", TweetsController, only: [:index, :create]
+    post "/my_tweet", TweetsController, :add_like
 
   end
 
@@ -38,6 +39,7 @@ defmodule TwitterWeb.Router do
     pipe_through [:api, :jwt_authenticated]
 
     get "/my_user", UsersController, :show
+    
   end
 
   # Enables LiveDashboard only for development

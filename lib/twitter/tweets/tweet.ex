@@ -4,6 +4,7 @@ defmodule Twitter.Tweets.Tweet do
   import Ecto.Changeset
 
   alias Twitter.Accounts.User
+  alias Twitter.Likes.Like
 
   @required [:text, :user_id]
   @optional [:id_ref]
@@ -12,6 +13,7 @@ defmodule Twitter.Tweets.Tweet do
     field :text, :string
     field :id_ref, :string
     belongs_to :user, User
+    has_many :likes, Like
 
     timestamps()
   end

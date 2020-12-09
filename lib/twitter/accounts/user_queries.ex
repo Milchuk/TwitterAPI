@@ -14,8 +14,8 @@ defmodule Twitter.Accounts.UserQueries do
   end
 
   def get(id) do
-    answer = from user in User, where: user.id == ^id
-    Repo.one(answer)
+    users = from user in User, where: user.id == ^id
+    Repo.one(users)
   end
 
   def get_by_email(email) when is_binary(email) do

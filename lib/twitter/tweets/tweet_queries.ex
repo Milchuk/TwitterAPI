@@ -20,4 +20,10 @@ defmodule Twitter.Tweets.TweetQueries do
     reps = from tweet in Tweet, where: tweet.id_ref == ^id
     Repo.all(reps)
   end
+
+  def get(id) do
+    answer = from tweet in Tweet, where: tweet.id == ^id
+    Repo.one(answer)
+  end
+
 end
