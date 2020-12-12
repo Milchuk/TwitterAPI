@@ -18,7 +18,7 @@ defmodule TwitterWeb.TweetsController do
 
   def add_like(conn, params) do
     with {:ok, like} <- Likes.add_like(params) do
-      tweet = Tweets.get_tweet(like.tweet_ident)
+      tweet = Tweets.get_tweet(like.tweet_id)
       render(conn, "show.json", %{tweet: tweet})
     end
   end

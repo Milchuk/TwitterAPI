@@ -5,5 +5,4 @@ defmodule Twitter.Tweets do
   def recent_tweets(), do: TweetQueries.recent()
   def reply_tweets(id), do: TweetQueries.replies(id)
   def get_tweet(id), do: TweetQueries.get(id)
-  
 end

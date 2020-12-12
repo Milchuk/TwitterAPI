@@ -3,8 +3,8 @@ defmodule Twitter.Repo.Migrations.CreateLikes do
 
   def change do
     create table :likes do
-      add :tweet_ident, :string, null: false
-      add :user_ident, :string, null: false
+      add :tweet_id, references(:tweets, on_delete: :delete_all)
+      add :user_id, :integer
 
       timestamps()
     end
