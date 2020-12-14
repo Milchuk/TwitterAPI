@@ -7,6 +7,10 @@ defmodule Twitter.Accounts.User do
   alias Ecto.Changeset
   alias Twitter.Tweets.Tweet
   alias Twitter.Accounts.User
+  alias Twitter.Likes.Like
+
+  @required [:email, :password, :password_confirmation]
+  @optional [:username]
 
   schema "users" do
     field :email, :string
@@ -16,14 +20,15 @@ defmodule Twitter.Accounts.User do
     field :password_confirmation, :string, virtual: true
 
     has_many :tweets, Tweet
+    has_many :likes, Like
 
     timestamps()
   end
 
   def changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:email, :password, :password_confirmation, :username])
-    |> validate_required([:email, :password, :password_confirmation])
+    |> cast(attrs, @required ++ @optional)
+    |> validate_required(@required)
     |> validate_format(:email, ~r/@/)
     |> validate_length(:password, min: 8)
     |> validate_confirmation(:password)

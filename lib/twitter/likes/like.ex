@@ -3,21 +3,23 @@ defmodule Twitter.Likes.Like do
   
     import Ecto.Changeset
   
+    alias Twitter.Accounts.User
     alias Twitter.Tweets.Tweet
     alias Twitter.Likes.Like
   
-    schema "likes" do
-      field :tweet_id, :integer
-      field :user_id, :integer
+    @required [:tweet_id, :user_id]
 
-      belongs_to :tweets, Tweet
+    schema "likes" do
+
+      belongs_to :tweet, Tweet
+      belongs_to :user, User
   
       timestamps()
     end
   
     def changeset(%Like{} = like, attrs) do
       like
-      |> cast(attrs, [:tweet_id, :user_id])
-      |> validate_required([:tweet_id, :user_id])
+      |> cast(attrs, @required )
+      |> validate_required(@required )
     end
 end
