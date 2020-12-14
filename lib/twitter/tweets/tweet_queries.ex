@@ -2,7 +2,6 @@ defmodule Twitter.Tweets.TweetQueries do
 
   alias Twitter.Repo
   alias Twitter.Tweets.Tweet
-  alias Twitter.Likes.Like
 
   import Ecto.Query
 
@@ -23,15 +22,15 @@ defmodule Twitter.Tweets.TweetQueries do
   end
 
   def get(id) do
-    count_likes()
-    tweet = from t in Tweet, where: t.id == ^id
+    tweets_w_likes = count_likes()
+    tweet = from t in tweets_w_likes, where: t.id == ^id
     Repo.one(tweet)
   end
 
   def count_likes() do
-    Repo.all(from tweet in Tweet,
+    from tweet in Tweet,
             left_join: like in assoc(tweet, :likes),
             group_by: tweet.id,
-            select_merge: %{likes_num: count(like.id)})
+            select_merge: %{likes_num: count(like.id)}
   end
 end
