@@ -12,7 +12,7 @@ defmodule Twitter.Tweets.Tweet do
   schema "tweets" do
     field :text, :string
     field :id_ref, :string
-    field :likes_num, :integer, virtual: true
+    field :likes_amount, :integer, virtual: true
     
     belongs_to :user, User
     has_many :likes, Like

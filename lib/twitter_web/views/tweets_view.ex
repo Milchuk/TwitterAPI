@@ -11,7 +11,7 @@ defmodule TwitterWeb.TweetsView do
       text: tweet.text,
       user_id: tweet.user_id,
       id_ref: tweet.id_ref,
-      likes_num: tweet.likes_num,
+      likes_amount: tweet.likes_amount,
       inserted_at: tweet.inserted_at
     }
   end
