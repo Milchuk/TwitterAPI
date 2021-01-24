@@ -23,6 +23,16 @@ defmodule TwitterWeb.TweetsController do
     end
   end
 
+  def feed(conn, %{"user_id" => user_id}) do
+    tweets = Tweets.all_tweets_from_subscribes(user_id)
+    render(conn, "index.json", %{tweets: tweets})
+  end
+
+  def feed_likes(conn, %{"user_id" => user_id}) do
+    tweets = Tweets.liked_tweets_by_subscribes(user_id)
+    render(conn, "index.json", %{tweets: tweets})
+  end
+
   def create(conn, params) do
     with {:ok, tweet} <- Tweets.create_tweet(params) do
       render(conn, "show.json", %{tweet: tweet})

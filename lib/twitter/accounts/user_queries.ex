@@ -6,7 +6,8 @@ defmodule Twitter.Accounts.UserQueries do
 
   alias Twitter.Repo
   alias Twitter.Accounts.User
-
+  alias Twitter.Subscribes.Subscribe
+  
   def create(attrs \\ %{}) do
     %User{}
     |> User.changeset(attrs)
@@ -14,8 +15,10 @@ defmodule Twitter.Accounts.UserQueries do
   end
 
   def get(id) do
-    users = from user in User, where: user.id == ^id
-    Repo.one(users)
+    query = from user in User, where: user.id == ^id
+    query
+    |>put_subscribes_amount
+    |>Repo.one
   end
 
   def get_by_email(email) when is_binary(email) do
@@ -26,6 +29,14 @@ defmodule Twitter.Accounts.UserQueries do
       user ->
         {:ok, user}
     end
+  end
+
+  def put_subscribes_amount(query) do
+    from user in query,
+            left_join: subscribe in Subscribe,
+            group_by: user.id,
+            where: user.id == subscribe.user_id_subscribed_to,
+            select_merge: %{subscribes_amount: count(subscribe.id)}
   end
 
   def verify_password(password, %User{} = user) when is_binary(password) do

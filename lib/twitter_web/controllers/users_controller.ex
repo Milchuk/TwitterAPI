@@ -3,6 +3,8 @@ defmodule TwitterWeb.UsersController do
 
   alias Twitter.Accounts
   alias Twitter.Guardian
+  alias Twitter.Subscribes
+  alias Twitter.Accounts.UserQueries
 
   def create(conn, params) do
     with {:ok, user} <- Accounts.create_user(params),
@@ -16,6 +18,13 @@ defmodule TwitterWeb.UsersController do
     IO.inspect(user)
     conn |> render("user.json", user: user)
  end
+
+  def add_subscribe(conn, params) do
+    with {:ok, subscribe} <- Subscribes.add_subscribe(params) do
+      user = UserQueries.get(subscribe.user_id_subscribed_to)
+      render(conn, "user.json", %{user: user})
+    end
+  end
 
   def sign_in(conn, %{"email" => email, "password" => password}) do
     case Accounts.token_sign_in(email, password) do
