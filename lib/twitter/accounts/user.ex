@@ -8,6 +8,7 @@ defmodule Twitter.Accounts.User do
   alias Twitter.Tweets.Tweet
   alias Twitter.Accounts.User
   alias Twitter.Likes.Like
+  alias Twitter.Subscribes.Subscribe
 
   @required [:email, :password, :password_confirmation]
   @optional [:username]
@@ -18,9 +19,11 @@ defmodule Twitter.Accounts.User do
     field :username, :string
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
+    field :subscribes_amount, :integer, virtual: true
 
     has_many :tweets, Tweet
     has_many :likes, Like
+    has_many :subscribes, Subscribe
 
     timestamps()
   end
